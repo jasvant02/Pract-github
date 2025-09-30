@@ -9,8 +9,8 @@ export const Publisher = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (search.trim()) {
-      navigate(`/searchResults/${search}`);
+    if (searchQuery.trim()) {
+      navigate(`/searchResults/${searchQuery}`);
     }
   };
 
