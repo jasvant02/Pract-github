@@ -39,6 +39,7 @@ export const Publisher = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+        <button>Search</button>
       </div>
 
       <div>
