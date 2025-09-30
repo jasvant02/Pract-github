@@ -1,35 +1,46 @@
-import React, { useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { SearchResults } from "./SearchResults";
 
 export const Publisher = () => {
-  const [searchParams] = useSearchParams();
+  const { searchTerm } = useParams();
   const navigate = useNavigate();
+
   const allItems = ["abc", "def", "ghi", "jkl", "mno"];
-  const [filteredItems, setFilteredItems] = useState(allItems);
-  const [searchQuery, setSearchQuery] = useState(
-    searchParams.get("search") || ""
-  );
+  const [searchQuery, setSearchQuery] = useState(searchTerm || "");
+  const [filteredItems, setFilteredItems] = useState([]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const encoded = encodeURIComponent(searchQuery.trim());
+    if (searchQuery.trim() === "") {
+      navigate(`/searchResults`, { replace: true });
+    } else if (encoded !== searchTerm) {
+      navigate(`/searchResults/${encoded}`, { replace: true });
+    }
+  }, [searchQuery]);
 
-    navigate(`/searchResults?search=${encodeURIComponent(searchQuery)}`);
-  };
+  useEffect(() => {
+    const query = searchTerm || "";
+    setSearchQuery(query);
+
+    const filtered = allItems.filter((item) =>
+      item.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredItems(filtered);
+  }, [searchTerm]);
 
   return (
     <>
       <div>
-        <h1>Publishing Companies</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button type="submit">Search</button>
-        </form>
+        <h1>Publishing Companies-------</h1>
+        <input
+          type="text"
+          placeholder="input"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
       </div>
+
       <div>
         {filteredItems.length > 0 ? (
           <ul>
@@ -41,6 +52,7 @@ export const Publisher = () => {
           <p>No results found for "{searchQuery}".</p>
         )}
       </div>
+
       <button onClick={() => navigate("/")}>Go to book list</button>
     </>
   );
