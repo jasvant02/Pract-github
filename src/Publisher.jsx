@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Publisher = () => {
   const navigate = useNavigate();
@@ -9,9 +9,7 @@ export const Publisher = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (searchQuery.trim()) {
-      navigate(`/searchResults/${searchQuery}`);
-    }
+    navigate(`/Available/${search}`);
   };
 
   return (
